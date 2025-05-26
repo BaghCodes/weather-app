@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=search" />
+    <title>Weather</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://images.alphacoders.com/533/thumb-1920-533936.jpg');
+        }
+
+        .topbar {
+            display: flex;
+            height: 300px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .searchcontainer {
+            opacity: 0.5;
+            width: 500px;
+            height: 50px;
+            display: flex;
+            padding: 5px;
+            border-radius: 999px;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 5px wheat;
+        }
+
+        .searchcontainer input {
+            border: none;
+            outline: none;
+            padding: 10px 15px;
+            flex: 1;
+            font-size: 16px;
+            border-radius: 999px;
+        }
+
+        .searchcontainer span {
+            border: 1px solid #999;
+            background-color: white;
+            padding: 10px 15px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            opacity: 0.9;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+            padding: 30px;
+            justify-self: center;
+        }
+
+        .location {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .weather-info {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .weather-item {
+            text-align: center;
+            margin: 15px;
+        }
+
+        .weather-item img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .weather-item h3 {
+            margin: 10px 0 5px;
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="searchcontainer">
+            <input type="text" id="locationip" placeholder="Search any location...">
+            <span class="material-symbols-outlined" id="searchbtn">search</span>
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="location">New York, USA</div>
+        <div class="weather-info">
+            <div class="weather-item">
+                <img src="https://img.icons8.com/ios-filled/100/temperature--v1.png" alt="Temperature">
+                <h3>Temperature</h3>
+                <p id="Temperature">25°C</p>
+            </div>
+            <div class="weather-item">
+                <img src="https://img.icons8.com/ios-filled/100/hygrometer.png" alt="Humidity">
+                <h3>Humidity</h3>
+                <span id="Humidity">60%</span>
+            </div>
+            <div class="weather-item">
+                <img src="https://img.icons8.com/ios-filled/100/wind.png" alt="Wind Speed">
+                <h3>Wind Speed</h3>
+                <span id="Wind">10 km/h</span>
+            </div>
+            <div class="weather-item">
+                <img src="https://img.icons8.com/ios-filled/100/cloud.png" alt="Cloud">
+                <h3>Cloud</h3>
+                <span id="Cloud">--</span>
+            </div>
+            <div class="weather-item">
+                <img src="https://img.icons8.com/ios-filled/100/visible.png" alt="Visibility">
+                <h3>Visibility</h3>
+                <span id="Visibility">--</span>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+
+    <script>
+        const API_key = "c113e5d2123009fc55fd310e65736ac7";
+
+        async function CheckWeather(loc) {
+            const API_url = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${loc}&appid=${API_key}`;
+            const response = await fetch(API_url);
+            const data = await response.json();
+            console.log(data);
+            if (response.ok) {
+                if (response.ok) {
+                    document.querySelector(".location").innerHTML = data.name;
+                    document.getElementById("Temperature").innerHTML = data.main.temp + " °C";
+                    document.getElementById("Humidity").innerHTML = data.main.humidity + "%";
+                    document.getElementById("Wind").innerHTML = data.wind.speed + " km/h";
+                    document.getElementById("Cloud").innerHTML = data.clouds.all + "%";
+                    document.getElementById("Visibility").innerHTML = (data.visibility / 1000) + " km";
+                }
+
+            } else {
+                alert("Location not found!");
+            }
+        }
+
+        document.getElementById("searchbtn").addEventListener("click", function () {
+            const loc = document.getElementById("locationip").value;
+            if (loc.trim() !== "") {
+                CheckWeather(loc);
+            } else {
+                alert("Enter a valid location");
+            }
+        });
+
+        document.getElementById("locationip").addEventListener("keypress", function (event) {
+            if (event.key === "Enter") {
+                const loc = document.getElementById("locationip").value;
+                if (loc.trim() !== "") {
+                    CheckWeather(loc);
+                } else {
+                    alert("Enter a valid location");
+                }
+            }
+        });
+
+
+    </script>
+</body>
+
+</html>
